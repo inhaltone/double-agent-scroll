@@ -119,3 +119,4 @@ export class DoubleAgentScroll {
         this.getActiveState();
     }
 }
+module.exports = { DoubleAgentScroll };
