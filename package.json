@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "publishConfig": {
-    "@inhaltone:registry": "https://npm.pkg.github.com"
+    "registry":"https://npm.pkg.github.com/@inhaltone"
   },
   "repository": {
     "type": "git",
