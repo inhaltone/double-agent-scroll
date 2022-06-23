@@ -22,7 +22,7 @@ Initialize Double Agent Scroll by creating an instance
 
 ````js
 
-const das = new DoubleAgentScroll(...);
+const doubleAgentScroll = new DoubleAgentScroll(...);
 
 ````
 By default, the instance captures the below mark up structure
@@ -33,16 +33,24 @@ By default, the instance captures the below mark up structure
 <!-- Navigation container -->
 <nav>
     <!-- link -->
-    <a href="#" class="double-agent-link active"></a>
-    <a href="#" class="double-agent-link"></a>
+    <a href="#sectionFirst" data-target="sectionFirst" class="double-agent-link active">
+        sectionFirst
+    </a>
+    <a href="#sectionSecond" data-target="sectionSecond" class="double-agent-link">
+        sectionSecond
+    </a>
     ...
 </nav>
 
 <!-- Scroll Agent container -->
 <div id="double-agent">
     <!-- Scroll Agent section to spy on -->
-    <section class="double-agent-section"></section>
-    <section class="double-agent-section"></section>
+    <section id="sectionFirst" class="double-agent-section">
+        <h2>sectionFirst</h2>
+    </section>
+    <section id="sectionSecond" class="double-agent-section">
+        <h2>sectionSecond</h2>
+    </section>
     ...
 </div>
 
@@ -51,7 +59,7 @@ By default, the instance captures the below mark up structure
 
 ```js
 
-const doubleAgent = new DoubleAgentScroll('.double-agent', {
+const doubleAgentScroll = new DoubleAgentScroll('#double-agent', {
     offsetTop: Number,
     navClass: String,
     sectionClass: String
@@ -62,9 +70,9 @@ const doubleAgent = new DoubleAgentScroll('.double-agent', {
 
 ``````js
 // Get links
-const navElements = doubleAgent.getNavElements();
+const navElements = doubleAgentScroll.getNavElements();
 
 // Get sections
-const sectionElements = doubleAgent.getSectionElements();
+const sectionElements = doubleAgentScroll.getSectionElements();
 
 ``````
