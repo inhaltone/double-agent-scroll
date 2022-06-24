@@ -4,12 +4,12 @@ ES Module that automatically updates nav element or list group based on scroll p
 
 #### ⌨️ Install from the command line:
 ```shell
-$ npm install @inhaltone/double-agent-scroll@1.0.13
+$ npm install @inhaltone/double-agent-scroll@1.0.14
 ````
 
 #### Install via package.json:
 ````json
-"@inhaltone/double-agent-scroll": "1.0.13"
+"@inhaltone/double-agent-scroll": "1.0.14"
 ````
 
 ## Declare
