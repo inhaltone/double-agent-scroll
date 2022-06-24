@@ -1,5 +1,5 @@
 
-import {DoubleAgentScroll} from "../double-agent-scroll/index.js";
+import {DoubleAgentScroll} from "./DoubleAgentScroll.js";
 
 const doubleAgentScroll = new DoubleAgentScroll();
 console.log(doubleAgentScroll);
