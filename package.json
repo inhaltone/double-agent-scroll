@@ -1,7 +1,7 @@
 {
   "name": "@inhaltone/double-agent-scroll",
   "type": "module",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "This JS Module automatically updates nav element or list group based on scroll position to indicate which link is currently active in the viewport. Also, when nav elements or list groups are clicked smooth scroll is being applied plus history push state.",
   "main": "index.js",
   "scripts": {
@@ -19,9 +19,5 @@
     "Javascript"
   ],
   "author": "inhaltone",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/inhaltone/double-agent-scroll/issues"
-  },
-  "homepage": "https://github.com/inhaltone/double-agent-scroll#readme"
+  "license": "ISC"
 }
