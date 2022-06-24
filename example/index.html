@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Double Agent Scroll</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Double Agent Scroll</h1>
+</header>
+<main>
+    <nav id="doubleScrollAgent">
+        <!-- link -->
+        <a href="#sectionFirst">
+            Double Agent Scroll
+        </a>
+        <a href="#sectionSecond">
+            How it works
+        </a>
+        <a href="#sectionThird">
+            Requirements
+        </a>
+    </nav>
+    <article data-scroll-target="doubleScrollAgent">
+        <section id="sectionFirst">
+            <h3>Double Agent Scroll</h3>
+            <p>JS Module that automatically updates nav element or list group based on scroll position to indicate which link is currently active in the viewport. Also, when nav elements or list groups are clicked smooth scroll is being applied plus history push state.</p>
+        </section>
+        <section id="sectionSecond">
+            <h3>How it works</h3>
+            <p>In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.</p>
+        </section>
+        <section id="sectionThird">
+            <h3>Requirements</h3>
+           <p>On the scrollable container, add data-scroll-target="{myID}" and on the navigation container id="{myID}" where the ID string must be the same on the scrollable container which is the unique id of the associated navigation.</p>
+        </section>
+    </article>
+</main>
+<script type="module"  src="./App.js"></script>
+</body>
+</html>

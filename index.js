@@ -1,26 +1,65 @@
 export class DoubleAgentScroll {
-    rootElement = '#double-agent';
+    scrollTarget = 'doubleScrollAgent';
     offsetTop = 100;
-    navClass = '.double-agent-link';
-    sectionClass = '.double-agent-section';
-    url = new URL(window.location);
-    navElements = Array();
-    sectionElements = Array();
-    activeIndex = 0;
+    activeClassName = 'active';
+    scrollTargetElement;
+    scrollNavElement;
+    scrollTargetChildren;
+    scrollNavChildren;
+    activeIndex;
+    url;
 
     constructor(...args) {
         if (args.length === 1 && typeof args[0] === 'string') {
-            this.rootElement = args[0];
+            this.scrollTarget = args[0];
         } else if (args.length === 2 && typeof args[0] === 'string' && typeof args[1] === 'object') {
-            this.rootElement = args[0];
+            this.scrollTarget = args[0];
             Object.assign(this, args[1]);
         }
-        this.navElements = this.getNavElements();
-        this.sectionElements = this.getSectionElements();
-        this.renderDoubleAgent();
+        if(typeof window !== 'undefined') {
+            this.scrollTargetElement = this.getScrollTarget();
+            this.scrollNavElement = this.getScrollNavElement();
+            this.scrollTargetChildren = this.getScrollTargetChildren();
+            this.scrollNavChildren = this.getScrollNavChildren();
+            this.activeIndex = this.getActiveIndex();
+            this.url = this.getCurrentURL();
+            this.#main();
+        }
+    };
+
+    #main(){
+        this.scrollTargetElement.addEventListener('scroll', this.onTargetScroll.bind(this));
+        this.scrollNavChildren.forEach(link => link.addEventListener('click', this.onNavClick.bind(this)));
+        this.setActiveClass(this.activeIndex);
         this.findHashOnURL();
-        this.getActiveState();
-    }
+    };
+
+    onTargetScroll(){
+        this.updateAgentState();
+    };
+
+    updateAgentState() {
+        const activeIndex = this.getActiveIndex();
+        if (activeIndex !== this.activeIndex) {
+            const activeSectionId = this.scrollTargetChildren[activeIndex].getAttribute('id');
+            this.url = this.setHashOnURL(activeSectionId);
+            this.clearActiveState();
+            this.setActiveClass(activeIndex);
+            this.activeIndex = activeIndex;
+        }
+    };
+
+    onNavClick(event){
+        event.preventDefault();
+        const target = this.extractHashString(event.currentTarget.getAttribute('href'));
+        this.url = this.setHashOnURL(target);
+        const foundSection = this.setFoundSection(target);
+        this.setScrollPosition(foundSection);
+    };
+
+    extractHashString(hashString) {
+        return hashString.replace(/#(\S)/g, '$1');
+    };
 
     findHashOnURL() {
         if (this.url.hash !== '') {
@@ -28,95 +67,76 @@ export class DoubleAgentScroll {
             const foundSection = this.setFoundSection(target);
             this.setScrollPosition(foundSection);
         }
-    }
+    };
 
-    renderDoubleAgent() {
-        if (this.rootElement != null) {
-            this.startScrollListener();
-            this.startClickListener(this.navElements);
+    getActiveIndex() {
+        const foundIndex = this.scrollTargetChildren.length - [...this.scrollTargetChildren].reverse().findIndex((section) => this.scrollTargetElement.scrollTop >= section.offsetTop - this.offsetTop) - 1;
+        if (foundIndex > this.scrollTargetChildren.length - 1) {
+            return 0;
         } else {
-            this.destroyScrollListener();
-            this.destroyClickListener(this.navElements);
+            return foundIndex;
         }
-    }
+    };
 
-    getNavElements() {
-        return Array.from(document.querySelectorAll(this.navClass));
-    }
-
-    getSectionElements() {
-        return Array.from(document.querySelectorAll(this.sectionClass));
-    }
-
-    getActiveState() {
-        const currentIndex = this.sectionElements.length - [...this.sectionElements].reverse().findIndex((section) => window.scrollY >= section.offsetTop - this.offsetTop) - 1;
-        if (currentIndex !== this.activeIndex) {
-            this.removeAllActive();
-            this.activeIndex = currentIndex;
-            this.setActiveClass(currentIndex);
+    getScrollTarget() {
+        if (typeof window !== 'undefined') {
+            return document.querySelector(`[data-scroll-target="${this.scrollTarget}"]`);
         }
-    }
+    };
 
-    setFoundSection(target) {
-        const foundSection = this.sectionElements.find((section) => section.id === target);
-        if (foundSection !== undefined) {
-            return foundSection;
+    getScrollNavElement() {
+        if (typeof window !== 'undefined') {
+            return document.getElementById(this.scrollTarget);
         }
-    }
+    };
+
+    getScrollTargetChildren() {
+        if (typeof window !== 'undefined') {
+           return Array.from(this.scrollTargetElement.querySelectorAll('[id]'));
+        }
+    };
+
+    getScrollNavChildren() {
+        if (typeof window !== 'undefined') {
+            return Array.from(this.scrollNavElement.querySelectorAll('a'));
+        }
+    };
+
+    getCurrentURL() {
+        return new URL(window.location);
+    };
 
     setHashOnURL(target) {
         const url = new URL(window.location);
         url.hash = target;
         window.history.pushState({}, '', url);
         return url;
-    }
+    };
+
+    setFoundSection(target) {
+        const foundSection = this.scrollTargetChildren.find((section) => section.id === target);
+        if (foundSection !== undefined) {
+            return foundSection;
+        }
+    };
 
     setScrollPosition(section) {
-        window.scrollTo({
+        this.scrollTargetElement.scrollTo({
             top: section.offsetTop - this.offsetTop,
             left: 0,
             behavior: 'smooth',
         });
-    }
+    };
 
     setActiveClass(index) {
-        this.navElements[index].classList.add('active');
-    }
+        this.scrollNavChildren[index].classList.add(this.activeClassName);
+    };
 
-    removeActiveClass(index) {
-        this.navElements[index].classList.remove('active');
-    }
+    clearActiveState() {
+        const removeActiveClass = (key) => {
+            this.scrollNavChildren[key].classList.remove(this.activeClassName);
+        };
 
-    removeAllActive() {
-        [...Array(this.sectionElements.length).keys()].forEach((key) => this.removeActiveClass(key));
-    }
-
-    startClickListener(links) {
-        links.forEach((link) => link.addEventListener('click', this.onClick.bind(this)));
-    }
-
-    destroyClickListener(links) {
-        links.forEach((link) => link.removeEventListener('click', this.onClick.bind(this)));
-    }
-
-    startScrollListener() {
-        window.addEventListener('scroll', this.onScroll.bind(this));
-    }
-
-    destroyScrollListener() {
-        window.removeEventListener('scroll', this.onScroll.bind(this));
-    }
-
-    onClick(event) {
-        event.preventDefault();
-        const target = event.currentTarget.dataset.target;
-        this.url = this.setHashOnURL(target);
-        const foundSection = this.setFoundSection(target);
-        this.setScrollPosition(foundSection);
-    }
-
-    onScroll() {
-        this.getActiveState();
-    }
+        [...Array(this.scrollTargetChildren.length).keys()].forEach((key) => removeActiveClass(key));
+    };
 }
-module.exports = { DoubleAgentScroll };

@@ -1,78 +1,112 @@
 # Double Agent Scroll 
-JS Module that automatically updates nav element or list group based on scroll position to indicate which link is currently active in the viewport. Also, when nav elements or list groups are clicked smooth scroll is being applied plus history push state.
+ES Module that automatically updates nav element or list group based on scroll position to indicate which link is currently active in the viewport. Also, when nav elements or list groups are clicked smooth scroll is being applied plus history push state.
 
 
 #### ⌨️ Install from the command line:
-````bash
-$ npm install @inhaltone/double-agent-scroll@1.0.4
+```shell
+$ npm install @inhaltone/double-agent-scroll@1.0.7
 ````
 
 #### Install via package.json:
 ````json
-"@inhaltone/double-agent-scroll": "1.0.4"
+"@inhaltone/double-agent-scroll": "1.0.7"
 ````
 
-## Use
-import module to your app
+## Declare
+import ES module to your app
 
 ```js
-import {DoubleAgentScroll} from "@inhaltone/double-agent-scroll";
+import { DoubleAgentScroll } from "@inhaltone/double-agent-scroll";
 ```
-Initialize Double Agent Scroll by creating an instance
+## Initialize
+Initialize Double Agent Scroll with default constructor params
 
 ````js
 
-const doubleAgentScroll = new DoubleAgentScroll(...);
+const doubleAgentScroll = new DoubleAgentScroll();
 
 ````
-By default, the instance captures the below mark up structure
-### HTML Layout
+By default, the instance corresponds to the below HTML structure
+
+## HTML Layout
 
 ``````html
 
 <!-- Navigation container -->
-<nav>
-    <!-- link -->
-    <a href="#sectionFirst" data-target="sectionFirst" class="double-agent-link active">
-        sectionFirst
-    </a>
-    <a href="#sectionSecond" data-target="sectionSecond" class="double-agent-link">
-        sectionSecond
-    </a>
+<nav id="doubleScrollAgent">
+    <!-- href corresponds to IDs of children of scrollable container below -->
+    <a href="#sectionFirst">Section First</a>
+    <a href="#sectionSecond">Section Second</a>
+    <a href="#sectionThird">Section Third</a>
     ...
 </nav>
 
 <!-- Scroll Agent container -->
-<div id="double-agent">
-    <!-- Scroll Agent section to spy on -->
-    <section id="sectionFirst" class="double-agent-section">
-        <h2>sectionFirst</h2>
+<!-- data-scroll-target for scrollable container corresponds to navigation container ID value -->
+<div data-scroll-target="doubleScrollAgent">
+    <section id="sectionFirst">
+        <h3>Section First</h3>
+        <p>JS Module... </p>
     </section>
-    <section id="sectionSecond" class="double-agent-section">
-        <h2>sectionSecond</h2>
+    <section id="sectionSecond">
+        <h3>Section First</h3>
+        <p>JS Module... </p>
+    </section>
+    <section id="sectionThird">
+        <h3>Section Third</h3>
+        <p>JS Module... </p>
     </section>
     ...
 </div>
 
 ``````
-### Initialize DoubleAgentScroll
+## Syntax
+The DoubleAgentScroll() constructor returns a newly created object representing the scroll HTML structure defined by the parameters.
+```js
+new DoubleAgentScroll();
+new DoubleAgentScroll(element, params);
+```
+### Parameters
+
+#### element <sup>*optional*</sup>
+A string or any other object with a stringifier
+#### params <sup>*optional*</sup>
+An object with predefined keys
+````js
+let params: {
+    offsetTop: Number,
+    activeClassName: String
+};
+````
+## Example
 
 ```js
 
-const doubleAgentScroll = new DoubleAgentScroll('#double-agent', {
-    offsetTop: Number,
-    navClass: String,
-    sectionClass: String
+const doubleAgentScroll = new DoubleAgentScroll('myAgent', {
+    offsetTop: 100,
+    activeClassName: 'current-section'
 });
 ```
 
-### Methods
+## Methods
 
 ``````js
-// Get links
-const navElements = doubleAgentScroll.getNavElements();
+// Get current index
+const activeIndex = doubleAgentScroll.getActiveIndex();
 
-// Get sections
-const sectionElements = doubleAgentScroll.getSectionElements();
+// Get navigation element
+const navElement = doubleAgentScroll.getScrollNavElement();
+
+// Get children element from scrollable target container
+const scrollableSections = doubleAgentScroll.getScrollTargetChildren();
+
+// Get navigation link elements
+const navLinks = doubleAgentScroll.getScrollNavChildren();
+
+//Get current URL object with hash params
+const currentUrl = doubleAgentScroll.getCurrentURL();
+
+//Set scroll position programmaticaly
+doubleAgentScroll.setScrollPosition(scrollableSection);
 
 ``````
